@@ -17,5 +17,6 @@
   "prettier.semi": false,
   "typescript.format.semicolons": "remove",
   "javascript.format.semicolons": "remove",
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all"
 }
