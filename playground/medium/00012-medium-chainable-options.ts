@@ -39,9 +39,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Chainable = {
-  option(key: string, value: any): any
-  get(): any
+type Chainable<T = {}> = {
+  option<K extends string, V>(key: K, value: V): Chainable<Omit<T,K> & Record<K,V>>
+  get(): T
 }
 
 /* _____________ Test Cases _____________ */
@@ -66,6 +66,8 @@ const result3 = a
   // @ts-expect-error
   .option('name', 123)
   .get()
+
+type thing = typeof result3
 
 type cases = [
   Expect<Alike<typeof result1, Expected1>>,
