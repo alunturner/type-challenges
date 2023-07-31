@@ -20,9 +20,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type TupleToUnion<T> = T extends [infer F, ...infer R]
-  ? F | TupleToUnion<R>
-  : never
+type TupleToUnion<T extends any[]> = T[number]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
