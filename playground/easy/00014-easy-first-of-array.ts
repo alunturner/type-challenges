@@ -22,7 +22,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type First<T extends any[]> = T extends [infer F] ? F : never
+type First<T extends any[]> = T extends [infer F, ...infer R] ? F : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
