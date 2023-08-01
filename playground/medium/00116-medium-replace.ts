@@ -5,7 +5,8 @@
 
   ### Question
 
-  Implement `Replace<S, From, To>` which replace the string `From` with `To` once in the given string `S`
+  Implement `Replace<S, From, To>` which replace the string `From` with `To` once in the given string
+  `S`.
 
   For example
 
@@ -18,10 +19,20 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Replace<S extends string, From extends string, To extends string> = any
+type Replace<
+  S extends string,
+  From extends string,
+  To extends string,
+> = From extends ''
+  ? S
+  : S extends `${infer Start}${From}${infer End}`
+  ? `${Start}${To}${End}`
+  : S
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+
+type thing = Replace<'foobarbar', '', 'foo'>
 
 type cases = [
   Expect<Equal<Replace<'foobar', 'bar', 'foo'>, 'foofoo'>>,
