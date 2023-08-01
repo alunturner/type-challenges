@@ -20,11 +20,9 @@
 /* _____________ Your Code Here _____________ */
 
 type WhiteSpace = " " | "\n" | "\t"
-type Trim<S extends string> = S extends `${WhiteSpace}${infer End}`
-  ? Trim<End>
-  : S extends `${infer Start}${WhiteSpace}`
-    ? Trim<Start>
-    : S
+type Trim<S extends string> = S extends `${WhiteSpace}${infer R}` | `${infer R}${WhiteSpace}`
+  ? Trim<R>
+  : S
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
