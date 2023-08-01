@@ -5,7 +5,8 @@
 
   ### Question
 
-  Type the function `PromiseAll` that accepts an array of PromiseLike objects, the returning value should be `Promise<T>` where `T` is the resolved result array.
+  Type the function `PromiseAll` that accepts an array of PromiseLike objects, the returning value
+  should be `Promise<T>` where `T` is the resolved result array.
 
   ```ts
   const promise1 = Promise.resolve(3);
@@ -23,7 +24,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function PromiseAll(values: any): any
+declare function PromiseAll<T extends any[]>(values: readonly [...T]): 
+  Promise<{ [key in keyof T]: T[key] extends Promise<infer P> | infer P
+    ? P
+    : never
+   }>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
