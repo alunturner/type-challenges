@@ -5,7 +5,8 @@
 
   ### Question
 
-  Implement `Trim<T>` which takes an exact string type and returns a new string with the whitespace from both ends removed.
+  Implement `Trim<T>` which takes an exact string type and returns a new string with the whitespace
+  from both ends removed.
 
   For example
 
@@ -18,11 +19,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Trim<S extends string> = any
+type WhiteSpace = " " | "\n" | "\t"
+type Trim<S extends string> = S extends `${WhiteSpace}${infer End}`
+  ? Trim<End>
+  : S extends `${infer Start}${WhiteSpace}`
+    ? Trim<Start>
+    : S
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = Trim<'     str  '>
 type cases = [
   Expect<Equal<Trim<'str'>, 'str'>>,
   Expect<Equal<Trim<' str'>, 'str'>>,
