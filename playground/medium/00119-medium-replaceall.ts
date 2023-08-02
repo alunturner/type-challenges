@@ -18,10 +18,20 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ReplaceAll<S extends string, From extends string, To extends string> = any
+type ReplaceAll<
+  S extends string,
+  From extends string,
+  To extends string,
+> = From extends ''
+  ? S
+  : S extends `${infer Start}${From}${infer End}`
+  ? `${Start}${To}${ReplaceAll<End, From, To>}`
+  : S
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+
+type thing = ReplaceAll<'foobarfoobar', 'ob', 'b'>
 
 type cases = [
   Expect<Equal<ReplaceAll<'foobar', 'bar', 'foo'>, 'foofoo'>>,

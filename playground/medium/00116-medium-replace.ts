@@ -32,7 +32,7 @@ type Replace<
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
-type thing = Replace<'foobarbar', '', 'foo'>
+type thing = Replace<'foobarbar', 'bar', 'foo'>
 
 type cases = [
   Expect<Equal<Replace<'foobar', 'bar', 'foo'>, 'foofoo'>>,
