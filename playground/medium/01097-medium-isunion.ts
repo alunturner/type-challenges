@@ -20,11 +20,18 @@
 
 /* _____________ Your Code Here _____________ */
 
-type IsUnion<T> = any
+type IsUnion<T, S = T> = [T] extends [never]
+  ? false
+  : T extends S
+  ? [S] extends [T]
+    ? false
+    : true
+  : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = IsUnion<'a' | 'b' | 'c' | 'd'>
 type cases = [
   Expect<Equal<IsUnion<string>, false>>,
   Expect<Equal<IsUnion<string | number>, true>>,
