@@ -27,7 +27,13 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Merge<F, S> = any
+type Merge<F, S> = {
+  [key in keyof F | keyof S]: key extends keyof S
+    ? S[key]
+    : key extends keyof F
+    ? F[key]
+    : never
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -41,12 +47,19 @@ type Bar = {
   c: boolean
 }
 
+type thing = Merge<Foo, Bar>
+
 type cases = [
-  Expect<Equal<Merge<Foo, Bar>, {
-    a: number
-    b: number
-    c: boolean
-  }>>,
+  Expect<
+    Equal<
+      Merge<Foo, Bar>,
+      {
+        a: number
+        b: number
+        c: boolean
+      }
+    >
+  >,
 ]
 
 /* _____________ Further Steps _____________ */
