@@ -12,11 +12,20 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Diff<O, O1> = any
+type Diff<O, O1> = {
+  [key in
+    | keyof Omit<O, keyof O1>
+    | keyof Omit<O1, keyof O>]: key extends keyof O
+    ? O[key]
+    : key extends keyof O1
+    ? O1[key]
+    : never
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = Diff<Foo, Bar>
 type Foo = {
   name: string
   age: string
