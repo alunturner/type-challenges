@@ -12,12 +12,18 @@
 
 /* _____________ Your Code Here _____________ */
 
+// with objects '&' gives you all of the keys, '|' gives you the common keys
 type Diff<O, O1> = Omit<O & O1, keyof (O | O1)>
+
+// without Omit
+// type Diff<O, O1> = {
+//   [key in keyof (O & O1) as key extends keyof (O | O1) ? never : key]: (O & O1)[key]
+// }
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
-type thing = Diff<Foo, Bar>
+type thing = keyof (Foo | Bar)
 type Foo = {
   name: string
   age: string
