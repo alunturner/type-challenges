@@ -18,17 +18,8 @@
 */
 
 /* _____________ Your Code Here _____________ */
-
-type Absolute<
-  T extends number | string | bigint,
-  Acc extends string = '',
-> = T extends ''
-  ? Acc
-  : `${T}` extends `${infer First}${infer Rest}`
-  ? First extends '-'
-    ? Absolute<Rest, Acc>
-    : Absolute<Rest, `${Acc}${First}`>
-  : never
+type Absolute<T extends number | string | bigint> =
+  `${T}` extends `-${infer Rest}` ? Rest : `${T}`
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
