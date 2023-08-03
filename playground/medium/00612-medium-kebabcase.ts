@@ -24,18 +24,24 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Punctuation = '-' | '_'
-type KebabCase<S, Acc extends string = ''> = S extends ''
-  ? Acc
-  : S extends `${infer F}${infer R}`
-  ? Acc extends ''
-    ? KebabCase<R, `${Lowercase<F>}`> // always lowercase the first letter
-    : F extends Punctuation
-    ? KebabCase<R, `${Acc}${F}`> // pass through punctuation
-    : Lowercase<F> extends F
-    ? KebabCase<R, `${Acc}${F}`> // pass through lower case letters
-    : KebabCase<R, `${Acc}-${Lowercase<F>}`> // kebabify(?) upper case letters
-  : never
+// Uncapitalize builtin helps handle this in much shorter code, it handles the punctuation better
+type KebabCase<S extends string> = S extends `${infer F}${infer R}`
+  ? R extends Uncapitalize<R>
+    ? `${Lowercase<F>}${KebabCase<R>}`
+    : `${Lowercase<F>}-${KebabCase<R>}`
+  : S
+// type Punctuation = '-' | '_'
+// type KebabCase<S, Acc extends string = ''> = S extends ''
+//   ? Acc
+//   : S extends `${infer F}${infer R}`
+//   ? Acc extends ''
+//     ? KebabCase<R, `${Lowercase<F>}`> // always lowercase the first letter
+//     : F extends Punctuation
+//     ? KebabCase<R, `${Acc}${F}`> // pass through punctuation
+//     : Lowercase<F> extends F
+//     ? KebabCase<R, `${Acc}${F}`> // pass through lower case letters
+//     : KebabCase<R, `${Acc}-${Lowercase<F>}`> // kebabify(?) upper case letters
+//   : never
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
