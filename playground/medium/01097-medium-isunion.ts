@@ -22,7 +22,7 @@
 
 type IsUnion<T, S = T> = [T] extends [never]
   ? false
-  : T extends S
+  : T extends T
   ? [S] extends [T]
     ? false
     : true
