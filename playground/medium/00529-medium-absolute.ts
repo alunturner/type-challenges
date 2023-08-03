@@ -19,11 +19,21 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Absolute<T extends number | string | bigint> = any
+type Absolute<
+  T extends number | string | bigint,
+  Acc extends string = '',
+> = T extends ''
+  ? Acc
+  : `${T}` extends `${infer First}${infer Rest}`
+  ? First extends '-'
+    ? Absolute<Rest, Acc>
+    : Absolute<Rest, `${Acc}${First}`>
+  : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = Absolute<-5>
 type cases = [
   Expect<Equal<Absolute<0>, '0'>>,
   Expect<Equal<Absolute<-0>, '0'>>,
