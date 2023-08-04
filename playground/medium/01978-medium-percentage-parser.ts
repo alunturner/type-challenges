@@ -31,11 +31,24 @@
 */
 
 /* _____________ Your Code Here _____________ */
+type PlusOrMinus = '+' | '-'
+type Percent = '%'
 
-type PercentageParser<A extends string> = any
+type PercentageParser<
+  T extends string,
+  Acc extends [string, string, string] = ['', '', ''],
+> = T extends `${infer Char}${infer Rest}`
+  ? Char extends Percent
+    ? PercentageParser<Rest, [Acc[0], Acc[1], Char]> // Char is %
+    : Char extends PlusOrMinus
+    ? PercentageParser<Rest, [Char, Acc[1], Acc[2]]> // Char is +-
+    : PercentageParser<Rest, [Acc[0], `${Acc[1]}${Char}`, Acc[2]]> // Char is numeric
+  : Acc
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+
+type thing = PercentageParser<'100%'>
 
 type Case0 = ['', '', '']
 type Case1 = ['+', '', '']
