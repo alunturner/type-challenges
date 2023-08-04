@@ -19,11 +19,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MinusOne<T extends number> = any
+type MinusOne<T extends number, Acc extends T[] = []> = [
+  ...Acc,
+  T,
+]['length'] extends T
+  ? Acc['length']
+  : MinusOne<T, [...Acc, T]>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = MinusOne<1>
 type cases = [
   Expect<Equal<MinusOne<1>, 0>>,
   Expect<Equal<MinusOne<55>, 54>>,
