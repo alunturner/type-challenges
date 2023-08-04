@@ -18,11 +18,20 @@
 
 /* _____________ Your Code Here _____________ */
 
-type DropChar<S, C> = any
+type DropChar<
+  S,
+  C,
+  Acc extends string = '',
+> = S extends `${infer First}${infer Rest}`
+  ? First extends C
+    ? DropChar<Rest, C, Acc>
+    : DropChar<Rest, C, `${Acc}${First}`>
+  : Acc
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = DropChar<'butter fly!', ' '>
 type cases = [
   // @ts-expect-error
   Expect<Equal<DropChar<'butter fly!', ''>, 'butterfly!'>>,
