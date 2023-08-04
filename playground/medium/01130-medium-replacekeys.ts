@@ -45,11 +45,22 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ReplaceKeys<U, T, Y> = any
+type ReplaceKeys<U, T extends string, Y> = {
+  [key in keyof U]: key extends T
+    ? key extends keyof Y
+      ? Y[key]
+      : never
+    : U[key]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = ReplaceKeys<
+  { test: 'keys'; like: 'this' },
+  'test',
+  { test: 'false' }
+>
 type NodeA = {
   type: 'A'
   name: string
@@ -103,7 +114,12 @@ type ReplacedNodes = ReplacedNodeA | ReplacedNodeB | ReplacedNodeC
 type NodesNoName = NoNameNodeA | NoNameNodeC | NodeB
 
 type cases = [
-  Expect<Equal<ReplaceKeys<Nodes, 'name' | 'flag', { name: number; flag: string }>, ReplacedNodes>>,
+  Expect<
+    Equal<
+      ReplaceKeys<Nodes, 'name' | 'flag', { name: number; flag: string }>,
+      ReplacedNodes
+    >
+  >,
   Expect<Equal<ReplaceKeys<Nodes, 'name', { aa: number }>, NodesNoName>>,
 ]
 
