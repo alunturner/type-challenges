@@ -23,9 +23,7 @@ type DropChar<
   C,
   Acc extends string = '',
 > = S extends `${infer First}${infer Rest}`
-  ? First extends C
-    ? DropChar<Rest, C, Acc>
-    : DropChar<Rest, C, `${Acc}${First}`>
+  ? DropChar<Rest, C, First extends C ? Acc : `${Acc}${First}`>
   : Acc
 
 /* _____________ Test Cases _____________ */
