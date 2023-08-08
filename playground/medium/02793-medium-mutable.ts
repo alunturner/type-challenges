@@ -25,7 +25,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Mutable<T> = any
+type Mutable<T extends { [K: string | number | symbol]: any }> = {
+  -readonly [key in keyof T]: T[key]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
