@@ -23,7 +23,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ObjectEntries<T> = any
+type ObjectEntries<T, U = Required<T>> = {
+  [key in keyof U]: [key, U[key] extends never ? undefined : U[key]]
+}[keyof U]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -34,14 +36,23 @@ interface Model {
   locations: string[] | null
 }
 
-type ModelEntries = ['name', string] | ['age', number] | ['locations', string[] | null]
+type ModelEntries =
+  | ['name', string]
+  | ['age', number]
+  | ['locations', string[] | null]
 
+type thing = ObjectEntries<Model>
 type cases = [
   Expect<Equal<ObjectEntries<Model>, ModelEntries>>,
   Expect<Equal<ObjectEntries<Partial<Model>>, ModelEntries>>,
   Expect<Equal<ObjectEntries<{ key?: undefined }>, ['key', undefined]>>,
   Expect<Equal<ObjectEntries<{ key: undefined }>, ['key', undefined]>>,
-  Expect<Equal<ObjectEntries<{ key: string | undefined }>, ['key', string | undefined]>>,
+  Expect<
+    Equal<
+      ObjectEntries<{ key: string | undefined }>,
+      ['key', string | undefined]
+    >
+  >,
 ]
 
 /* _____________ Further Steps _____________ */
