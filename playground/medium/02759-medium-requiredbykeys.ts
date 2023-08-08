@@ -27,7 +27,13 @@
 
 /* _____________ Your Code Here _____________ */
 
-type RequiredByKeys<T, K> = any
+type RequiredByKeys<T, K extends keyof T = keyof T> = {
+  [key in keyof T as key extends K ? never : key]: T[key]
+} & {
+  [key in keyof T as key extends K ? key : never]-?: T[key]
+} extends infer I
+  ? { [key in keyof I]: I[key] }
+  : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -49,7 +55,7 @@ interface UserRequiredNameAndAge {
   age: number
   address?: string
 }
-
+type thing = RequiredByKeys<User, 'name'>
 type cases = [
   Expect<Equal<RequiredByKeys<User, 'name'>, UserRequiredName>>,
   Expect<Equal<RequiredByKeys<User, 'name' | 'age'>, UserRequiredNameAndAge>>,
