@@ -26,7 +26,10 @@
 
 /* _____________ Your Code Here _____________ */
 
-type PartialByKeys<T, K> = any
+type PartialByKeys<T extends {}, U extends keyof T = keyof T> = Omit<
+  { [key in keyof T as key extends U ? key : never]?: T[key] } & Omit<T, U>,
+  never
+>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -48,7 +51,7 @@ interface UserPartialNameAndAge {
   age?: number
   address: string
 }
-
+type thing = PartialByKeys<User, 'name'>
 type cases = [
   Expect<Equal<PartialByKeys<User, 'name'>, UserPartialName>>,
   Expect<Equal<PartialByKeys<User, 'name' | 'age'>, UserPartialNameAndAge>>,
