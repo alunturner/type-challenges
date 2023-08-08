@@ -19,11 +19,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Reverse<T> = any
+type Reverse<T extends unknown[], Acc extends unknown[] = []> = T extends [
+  infer F,
+  ...infer R,
+]
+  ? Reverse<R, [F, ...Acc]>
+  : Acc
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type thing = Reverse<['a', 'b']>
 type cases = [
   Expect<Equal<Reverse<[]>, []>>,
   Expect<Equal<Reverse<['a', 'b']>, ['b', 'a']>>,
