@@ -17,7 +17,7 @@
   > View on GitHub: https://tsch.js.org/3192
 */
 
-/* _____________ Your Code Here _____________ */
+/* _____________ Your Code Here ___________q__ */
 
 type Reverse<T extends unknown[], Acc extends unknown[] = []> = T extends [
   infer F,
