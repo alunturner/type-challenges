@@ -21,9 +21,10 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FlipArguments<T, Acc extends any[] = []> = T extends (
-  ...args: infer Args
-) => infer Return
+type FlipArguments<
+  T extends (...args: any) => any,
+  Acc extends any[] = [],
+> = T extends (...args: infer Args) => infer Return
   ? Args['length'] extends 0
     ? (...args: Acc) => Return
     : Args extends [infer F, ...infer R]
