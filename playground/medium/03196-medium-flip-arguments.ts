@@ -21,15 +21,30 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FlipArguments<T> = any
+type FlipArguments<T, Acc extends any[] = []> = T extends (
+  ...args: infer Args
+) => infer Return
+  ? Args['length'] extends 0
+    ? (...args: Acc) => Return
+    : Args extends [infer F, ...infer R]
+    ? FlipArguments<(...args: R) => Return, [F, ...Acc]>
+    : never
+  : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = FlipArguments<() => boolean>
 type cases = [
   Expect<Equal<FlipArguments<() => boolean>, () => boolean>>,
-  Expect<Equal<FlipArguments<(foo: string) => number>, (foo: string) => number>>,
-  Expect<Equal<FlipArguments<(arg0: string, arg1: number, arg2: boolean) => void>, (arg0: boolean, arg1: number, arg2: string) => void>>,
+  Expect<
+    Equal<FlipArguments<(foo: string) => number>, (foo: string) => number>
+  >,
+  Expect<
+    Equal<
+      FlipArguments<(arg0: string, arg1: number, arg2: boolean) => void>,
+      (arg0: boolean, arg1: number, arg2: string) => void
+    >
+  >,
 ]
 
 type errors = [
