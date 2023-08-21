@@ -21,7 +21,21 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FlattenDepth = any
+type Flatten<T extends any[]> = T extends [infer F, ...infer R]
+  ? F extends any[]
+    ? [...F, ...Flatten<R>]
+    : [F, ...Flatten<R>]
+  : T
+
+type FlattenDepth<
+  T extends any[],
+  C extends number = 1,
+  R extends any[] = [],
+> = T extends Flatten<T>
+  ? T
+  : C extends R['length']
+  ? T
+  : FlattenDepth<Flatten<T>, C, [unknown, ...R]>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -33,7 +47,9 @@ type cases = [
   Expect<Equal<FlattenDepth<[1, 2, [3, 4], [[[5]]]], 2>, [1, 2, 3, 4, [5]]>>,
   Expect<Equal<FlattenDepth<[1, 2, [3, 4], [[[5]]]]>, [1, 2, 3, 4, [[5]]]>>,
   Expect<Equal<FlattenDepth<[1, [2, [3, [4, [5]]]]], 3>, [1, 2, 3, 4, [5]]>>,
-  Expect<Equal<FlattenDepth<[1, [2, [3, [4, [5]]]]], 19260817>, [1, 2, 3, 4, 5]>>,
+  Expect<
+    Equal<FlattenDepth<[1, [2, [3, [4, [5]]]]], 19260817>, [1, 2, 3, 4, 5]>
+  >,
 ]
 
 /* _____________ Further Steps _____________ */
