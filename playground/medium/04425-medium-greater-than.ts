@@ -25,7 +25,15 @@
 
 /* _____________ Your Code Here _____________ */
 
-type GreaterThan<T extends number, U extends number> = any
+type GreaterThan<
+  T extends number,
+  U extends number,
+  Acc extends number[] = [],
+> = Acc['length'] extends T
+  ? false
+  : Acc['length'] extends U
+  ? true
+  : GreaterThan<T, U, [...Acc, 1]>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
