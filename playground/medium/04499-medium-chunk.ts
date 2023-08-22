@@ -19,11 +19,24 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Chunk = any
+type Chunk<
+  T extends any[],
+  CSize extends number,
+  CAcc extends any[] = [],
+  Acc extends any[] = [],
+> = CAcc['length'] extends CSize
+  ? Chunk<T, CSize, [], [...Acc, CAcc]>
+  : T['length'] extends 0
+  ? CAcc['length'] extends 0
+    ? Acc
+    : [...Acc, CAcc]
+  : T extends [infer F, ...infer R]
+  ? Chunk<R, CSize, [...CAcc, F], Acc>
+  : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = Chunk<[1, 2, 3], 1>
 type cases = [
   Expect<Equal<Chunk<[], 1>, []>>,
   Expect<Equal<Chunk<[1, 2, 3], 1>, [[1], [2], [3]]>>,
