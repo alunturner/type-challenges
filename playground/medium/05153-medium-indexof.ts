@@ -18,11 +18,15 @@
 
 /* _____________ Your Code Here _____________ */
 
-type IndexOf<T, U> = any
+type IndexOf<T extends any[], U, I extends any[] = []> = T extends [infer F, ...infer R]
+  ? Equal<F, U> extends true
+    ? I['length']
+    : IndexOf<R, U, [...I, 0]>
+  : -1
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = IndexOf<[string, 1, number, 'a'], number>
 type cases = [
   Expect<Equal<IndexOf<[1, 2, 3], 2>, 1>>,
   Expect<Equal<IndexOf<[2, 6, 3, 8, 4, 1, 7, 3, 9], 3>, 2>>,
