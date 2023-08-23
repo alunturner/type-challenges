@@ -18,7 +18,13 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Without<T, U> = any
+type Without<T extends any[], U extends T[number][] | T[number]> = U extends T[number]
+  ? Without<T, [U]>
+  : T extends [infer F, ...infer R]
+    ? F extends U[number]
+      ? [...Without<R, U>]
+      : [F, ...Without<R, U>]
+    : []
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
