@@ -17,12 +17,16 @@
 */
 
 /* _____________ Your Code Here _____________ */
-
-type Trunc = any
+type FullStop = '.'
+type Trunc<S extends string | number> = `${S}` extends `${infer F}${FullStop}${infer R}`
+  ? F extends ''
+    ? '0'
+    : F
+  : `${S}`
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = Trunc<'.3'>
 type cases = [
   Expect<Equal<Trunc<0.1>, '0'>>,
   Expect<Equal<Trunc<0.2>, '0'>>,
