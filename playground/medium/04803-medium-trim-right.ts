@@ -17,12 +17,14 @@
 */
 
 /* _____________ Your Code Here _____________ */
-
-type TrimRight<S extends string> = any
+type WhiteSpace = ' ' | '\t' | '\n'
+type TrimRight<S extends string> = S extends `${infer F}${WhiteSpace}`
+  ? TrimRight<F>
+  : S
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = TrimRight<'str     '>
 type cases = [
   Expect<Equal<TrimRight<'str'>, 'str'>>,
   Expect<Equal<TrimRight<'str '>, 'str'>>,
