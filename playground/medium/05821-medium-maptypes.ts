@@ -1,7 +1,7 @@
 /*
   5821 - MapTypes
   -------
-  by Krzysztof "Wokay" Łokaj (@wokayme) #medium #map #object #utils
+  by Krzysztof 'Wokay' Łokaj (@wokayme) #medium #map #object #utils
 
   ### Question
 
@@ -39,11 +39,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MapTypes<T, R> = any
+type MapTypes<T extends Record<string, any>, R extends Record<'mapFrom' | 'mapTo', any>> = {
+  [key in keyof T]: T[key] extends R['mapFrom']
+    ? R extends { mapFrom: T[key] }
+      ? R['mapTo']
+      : never
+    : T[key]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = MapTypes<{ name: string; date: Date }, { mapFrom: string; mapTo: boolean } | { mapFrom: Date; mapTo: string }>
 type cases = [
   Expect<Equal<MapTypes<{ stringToArray: string }, { mapFrom: string; mapTo: [] }>, { stringToArray: [] }>>,
   Expect<Equal<MapTypes<{ stringToNumber: string }, { mapFrom: string; mapTo: number }>, { stringToNumber: number }>>,

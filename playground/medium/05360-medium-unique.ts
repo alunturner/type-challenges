@@ -20,17 +20,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Includes<T, U> = U extends [infer F, ...infer Rest]
-  ? Equal<F, T> extends true
+type Includes<Arr, Item> = Arr extends [infer F, ...infer R]
+  ? Equal<F, Item> extends true
     ? true
-    : Includes<T, Rest>
+    : Includes<R, Item>
   : false
 
-type Unique<T, U extends any[] = []> = T extends [infer R, ...infer F]
-  ? Includes<R, U> extends true
-    ? Unique<F, [...U]>
-    : Unique<F, [...U, R]>
-  : U
+type Unique<Input, Result extends any[] = []> = Input extends [infer F, ...infer R]
+  ? Includes<Result, F> extends true
+    ? Unique<R, [...Result]>
+    : Unique<R, [...Result, F]>
+  : Result
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
