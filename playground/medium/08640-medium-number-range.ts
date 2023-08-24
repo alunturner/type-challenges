@@ -15,8 +15,13 @@
 */
 
 /* _____________ Your Code Here _____________ */
+type Increment<N extends number, Acc extends any[] = []> = Acc['length'] extends N
+  ? [...Acc, 1]['length']
+  : Increment<N, [...Acc, 1]>
 
-type NumberRange<L, H> = any
+type NumberRange<L extends number, H extends number, Union extends number = never> = L extends H
+  ? Union | H
+  : NumberRange<Increment<L>, H, Union | L>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
