@@ -12,12 +12,19 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FindEles<T extends any[]> = any
+type FindEles<T extends any[], Result extends any[] = [], Checked extends any[] = []> = 
+T extends [infer F, ...infer R]
+  ? F extends R[number]
+    ? FindEles<R, Result, [...Checked, F]>
+    : F extends Checked[number]
+      ? FindEles<R, Result, Checked>
+      : FindEles<R, [...Result, F], [...Checked, F]>
+  : Result
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 import { ExpectFalse, NotEqual } from '@type-challenges/utils'
-
+type thing = FindEles<[1, 2, 2, 3, 3, 4, 5, 6, 6, 6]>
 type cases = [
   Expect<Equal<FindEles<[1, 2, 2, 3, 3, 4, 5, 6, 6, 6]>, [1, 4, 5]>>,
   Expect<Equal<FindEles<[2, 2, 3, 3, 6, 6, 6]>, []>>,
