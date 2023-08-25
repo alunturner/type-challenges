@@ -22,11 +22,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type GetMiddleElement<T> = any
+type GetMiddleElement<T extends any[]> = T['length'] extends 0 | 1 | 2
+  ? T 
+  : T extends [infer First, ...infer Middle, infer Last]
+    ? Middle['length'] extends 1
+      ? Middle
+      : GetMiddleElement<Middle>
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = GetMiddleElement<[() => string]>
 type cases = [
   Expect<Equal<GetMiddleElement<[]>, []>>,
   Expect<Equal<GetMiddleElement<[1, 2, 3, 4, 5]>, [3]>>,
