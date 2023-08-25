@@ -12,11 +12,19 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FirstUniqueCharIndex<T extends string> = any
+type FirstUniqueCharIndex<T extends string,_Acc extends string[] = []> = T extends ''
+  ? -1
+  : T extends `${infer F}${infer R}`
+    ? F extends _Acc[number]
+      ? FirstUniqueCharIndex<R, [..._Acc, F]>
+      : R extends `${any}${F}${any}`
+        ? FirstUniqueCharIndex<R, [..._Acc, F]>
+        : _Acc['length']
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-
+type thing = FirstUniqueCharIndex<'aabb'>
 type cases = [
   Expect<Equal<FirstUniqueCharIndex<'leetcode'>, 0>>,
   Expect<Equal<FirstUniqueCharIndex<'loveleetcode'>, 2>>,
